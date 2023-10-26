@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { DriverModule } from './driver/driver.module';
+import { DriverModule } from './driver';
+import { AutomobileModule } from './automobile';
 @Module({
-  imports: [DriverModule],
+  imports: [DriverModule, AutomobileModule],
 })
 export class AppModule {}

@@ -19,7 +19,7 @@ model Driver {
 
 model Automobile {
   id String @id @default(uuid())
-  plate String
+  plate String  @unique
   color String
   brand String
 

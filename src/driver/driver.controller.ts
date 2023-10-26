@@ -29,6 +29,17 @@ export class DriverController {
     return this.driverService.list();
   }
 
+  @Get('/:id')
+  @ApiOperation({ summary: 'List driver' })
+  @ApiResponse({
+    status: 200,
+    description: 'Driver returned',
+    type: DriverEntity,
+  })
+  async findByName(@Param('id') id: string): Promise<DriverEntity> {
+    return this.driverService.findById(id);
+  }
+
   @Post('/')
   @ApiOperation({ summary: 'Create new driver' })
   @ApiResponse({

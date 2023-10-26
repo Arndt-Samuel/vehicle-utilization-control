@@ -10,7 +10,7 @@ export class DriverEntity implements DriverModel {
   id: string;
 
   @ApiProperty({
-    description: 'Organization Name',
+    description: 'Driver Name',
   })
   @IsString()
   name: string;

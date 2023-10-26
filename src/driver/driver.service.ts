@@ -17,6 +17,14 @@ export class DriverService {
     return this.prisma.driver.findMany();
   }
 
+  async findById(id: string): Promise<DriverEntity> {
+    return this.prisma.driver.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    });
+  }
+
   async delete(id: string): Promise<DriverEntity> {
     return this.prisma.driver.delete({
       where: {
