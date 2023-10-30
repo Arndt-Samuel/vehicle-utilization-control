@@ -8,6 +8,16 @@ export class AutomobileService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: AutomobileCreateDto): Promise<AutomobileEntity> {
+    const plateExists = await this.prisma.automobile.findUnique({
+      where: {
+        plate: data.plate,
+      },
+    });
+
+    if (plateExists) {
+      throw new Error('Plate already exists');
+    }
+
     return this.prisma.automobile.create({
       data,
     });

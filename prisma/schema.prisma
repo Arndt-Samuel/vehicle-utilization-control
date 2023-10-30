@@ -13,6 +13,7 @@ datasource db {
 model Driver {
   id String @id @default(uuid())
   name String 
+  automobileUtilizations AutomobileUtilizations[]
 
   @@map("driver")
 }
@@ -22,6 +23,20 @@ model Automobile {
   plate String  @unique
   color String
   brand String
+  automobileUtilizations AutomobileUtilizations[]
 
   @@map("automobile")
+}
+
+model AutomobileUtilizations {
+  id String @id @default(uuid())
+  driver Driver @relation(fields: [driverId], references: [id])
+  driverId String
+  automobile Automobile @relation(fields: [automobileId], references: [id])
+  automobileId String
+  initDate DateTime?
+  finalDate DateTime?
+  reasonForUse String
+
+  @@map("automobileutilizations")
 }

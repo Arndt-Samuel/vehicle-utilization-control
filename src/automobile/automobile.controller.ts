@@ -50,7 +50,7 @@ export class AutomobileController {
   @ApiOperation({ summary: 'List all automobile' })
   @ApiResponse({
     status: 200,
-    description: 'All drivers returned',
+    description: 'All automobiles returned',
     type: AutomobileEntity,
     isArray: true,
   })
