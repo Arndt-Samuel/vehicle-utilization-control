@@ -14,6 +14,7 @@ model Driver {
   id String @id @default(uuid())
   name String 
   automobileUtilizations AutomobileUtilizations[]
+  deleted   Boolean   @default(false)
 
   @@map("driver")
 }
@@ -24,7 +25,8 @@ model Automobile {
   color String
   brand String
   automobileUtilizations AutomobileUtilizations[]
-
+  deleted   Boolean   @default(false)
+  
   @@map("automobile")
 }
 

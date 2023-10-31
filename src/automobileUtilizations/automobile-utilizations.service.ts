@@ -13,6 +13,22 @@ export class AutomobileUtilizationsService {
   async create(
     data: AutomobileUtilizationCreateDto,
   ): Promise<AutomobileUtilizationsEntity> {
+    const automobile = await this.prisma.automobile.findUnique({
+      where: { id: data.automobileId, deleted: false },
+    });
+
+    if (!automobile) {
+      throw new Error('The automobile does not exist or is excluded.');
+    }
+
+    const driver = await this.prisma.driver.findUnique({
+      where: { id: data.driverId, deleted: false },
+    });
+
+    if (!driver) {
+      throw new Error('The driver does not exist or is deleted.');
+    }
+
     const automobileInUse = await this.prisma.automobileUtilizations.findFirst({
       where: { automobileId: data.automobileId, finalDate: null },
     });

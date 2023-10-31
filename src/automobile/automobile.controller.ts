@@ -32,6 +32,18 @@ export class AutomobileController {
     return this.automobileService.findByColorAndBrand(color, brand);
   }
 
+  @Get('/')
+  @ApiOperation({ summary: 'List all automobile' })
+  @ApiResponse({
+    status: 200,
+    description: 'All automobiles returned',
+    type: AutomobileEntity,
+    isArray: true,
+  })
+  async listAll(): Promise<AutomobileEntity[]> {
+    return this.automobileService.list();
+  }
+
   @Post('/')
   @ApiOperation({ summary: 'Create new automobile' })
   @ApiResponse({
@@ -44,18 +56,6 @@ export class AutomobileController {
     data: AutomobileCreateDto,
   ): Promise<AutomobileEntity> {
     return this.automobileService.create(data);
-  }
-
-  @Get('/')
-  @ApiOperation({ summary: 'List all automobile' })
-  @ApiResponse({
-    status: 200,
-    description: 'All automobiles returned',
-    type: AutomobileEntity,
-    isArray: true,
-  })
-  async listAll(): Promise<AutomobileEntity[]> {
-    return this.automobileService.list();
   }
 
   @Put('/:id')
@@ -82,5 +82,16 @@ export class AutomobileController {
   })
   async delete(@Param('id') automobileId: string): Promise<AutomobileEntity> {
     return this.automobileService.delete(automobileId);
+  }
+
+  @Post('/:id/recover')
+  @ApiOperation({ summary: 'Recover an automobile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Automobile recovered',
+    type: AutomobileEntity,
+  })
+  async recover(@Param('id') automobileId: string): Promise<AutomobileEntity> {
+    return this.automobileService.recover(automobileId);
   }
 }

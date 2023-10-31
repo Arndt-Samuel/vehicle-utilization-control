@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Automobile as AutomobileModel } from '@prisma/client';
-import { IsString, IsUUID, Length } from 'class-validator';
+import {
+  IsString,
+  IsUUID,
+  Length,
+  IsBoolean,
+  IsOptional,
+} from 'class-validator';
 
 export class AutomobileEntity implements AutomobileModel {
   @ApiPropertyOptional({
@@ -27,4 +33,11 @@ export class AutomobileEntity implements AutomobileModel {
   })
   @IsString()
   brand: string;
+
+  @ApiPropertyOptional({
+    description: 'Mark automobile as deleted',
+  })
+  @IsBoolean()
+  @IsOptional()
+  deleted: boolean;
 }

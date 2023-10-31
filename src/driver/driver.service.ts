@@ -26,11 +26,37 @@ export class DriverService {
   }
 
   async delete(id: string): Promise<DriverEntity> {
-    return this.prisma.driver.delete({
-      where: {
-        id,
-      },
+    const driver = await this.prisma.driver.findUnique({
+      where: { id },
     });
+
+    if (!driver) {
+      throw new Error('Driver not found');
+    }
+
+    const deletedDriver = await this.prisma.driver.update({
+      where: { id },
+      data: { deleted: true },
+    });
+
+    return deletedDriver;
+  }
+
+  async recover(id: string): Promise<DriverEntity> {
+    const driver = await this.prisma.driver.findUnique({
+      where: { id },
+    });
+
+    if (!driver) {
+      throw new Error('Driver not found');
+    }
+
+    const recoveredDriver = await this.prisma.driver.update({
+      where: { id },
+      data: { deleted: false },
+    });
+
+    return recoveredDriver;
   }
 
   async update(id: string, data: DriverUpdateDto): Promise<DriverEntity> {

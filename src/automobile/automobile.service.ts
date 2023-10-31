@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { AutomobileCreateDto, AutomobileUpdateDto } from './dto';
 import { AutomobileEntity } from './automobile.entity';
@@ -8,16 +8,6 @@ export class AutomobileService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: AutomobileCreateDto): Promise<AutomobileEntity> {
-    const plateExists = await this.prisma.automobile.findUnique({
-      where: {
-        plate: data.plate,
-      },
-    });
-
-    if (plateExists) {
-      throw new Error('Plate already exists');
-    }
-
     return this.prisma.automobile.create({
       data,
     });
@@ -27,21 +17,9 @@ export class AutomobileService {
     color: string,
     brand: string,
   ): Promise<AutomobileEntity[]> {
-    const colorExists = await this.prisma.automobile.findFirstOrThrow({
-      where: { color },
+    return this.prisma.automobile.findMany({
+      where: { color, brand },
     });
-    if (!colorExists) {
-      throw new UnauthorizedException();
-    }
-
-    const brandExists = await this.prisma.automobile.findFirstOrThrow({
-      where: { brand },
-    });
-    if (!brandExists) {
-      throw new UnauthorizedException();
-    }
-
-    return this.prisma.automobile.findMany({ where: { color, brand } });
   }
 
   async list(): Promise<AutomobileEntity[]> {
@@ -49,11 +27,27 @@ export class AutomobileService {
   }
 
   async delete(id: string): Promise<AutomobileEntity> {
-    return this.prisma.automobile.delete({
-      where: {
-        id,
-      },
+    return this.prisma.automobile.update({
+      where: { id },
+      data: { deleted: true },
     });
+  }
+
+  async recover(id: string): Promise<AutomobileEntity> {
+    const automobile = await this.prisma.automobile.findUnique({
+      where: { id },
+    });
+
+    if (!automobile) {
+      throw new Error('Automobile not found');
+    }
+
+    const recoveredAutomobile = await this.prisma.automobile.update({
+      where: { id },
+      data: { deleted: false },
+    });
+
+    return recoveredAutomobile;
   }
 
   async update(

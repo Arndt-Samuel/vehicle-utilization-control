@@ -79,4 +79,15 @@ export class DriverController {
   async delete(@Param('id') driverId: string): Promise<DriverEntity> {
     return this.driverService.delete(driverId);
   }
+
+  @Post('/:id/recover')
+  @ApiOperation({ summary: 'Recover driver' })
+  @ApiResponse({
+    status: 200,
+    description: 'Driver recovered',
+    type: DriverEntity,
+  })
+  async recover(@Param('id') driverId: string): Promise<DriverEntity> {
+    return this.driverService.recover(driverId);
+  }
 }
